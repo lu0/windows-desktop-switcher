@@ -30,3 +30,16 @@ LAlt & F9:: MoveCurrentWindowToDesktop(6)
 LAlt & F10:: MoveCurrentWindowToDesktop(6)   ; Repeated 'cause everyone makes mistakes :P
 LAlt & F11:: MoveCurrentWindowToDesktop(7)
 LAlt & F12:: MoveCurrentWindowToDesktop(8)
+
+
+; ----------------------------------------------------------
+; Misc
+; ----------------------------------------------------------
+
+; Show active window on all desktops
+; Alt + Enter
+!Enter:: togglePinWindowOnAllDesktops()
+
+; Show active window on all desktops, on top of all windows.
+; Alt + Shift + Enter
+!+Enter::togglePinWindowOnAllDesktopsOnTop()
