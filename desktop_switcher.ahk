@@ -5,7 +5,9 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability
 
 ; Globals
-DesktopCount := 7        ; Using 7 existing workspaces (virtual desktops)
+desktops := { "One" : 1, "Two" : 2 } ; Windows starts with 2 desktops at boot
+DesktopCount := getInitialNumberOfDesktops(desktops)
+
 CurrentDesktop := 1      ; Desktop count is 1-indexed (Microsoft numbers them this way)
 LastOpenedDesktop := 1
 
@@ -82,6 +84,25 @@ mapDesktopsFromRegistry()
     }
 }
 
+getInitialNumberOfDesktops(desktopDict) {
+    ; Get the number of destops (index starts on 0)
+    desktopCount := -1
+    for desk in desktopDict {
+        desktopCount++
+    }
+    return desktopCount
+}
+
+getDesktopNameByNumber(desktopNumber) {
+    global desktops
+    for key, val in desktops {
+        if (desktopNumber = val) {
+            desktopName := key
+        }
+    }
+    return desktopName
+}
+
 getCurrentWindowID() {
     WinGet, activeHwnd, ID, A
     return activeHwnd
@@ -140,7 +161,7 @@ showMessage(txt, title:="") {
     hideMessage()
     title := truncateString(title)
     txt := truncateString(txt)
-    TrayTip, %title%, %txt%, 1
+    TrayTip, %title%, %txt%, , 16
 }
 
 hideMessage() {
@@ -272,6 +293,8 @@ getForemostWindowIdOnDesktop(n)
 }
 
 MoveCurrentWindowToDesktop(desktopNumber) {
+    desktopName := getDesktopNameByNumber(desktopNumber)
+    showMessage(getCurrentWindowTitle(), "Moved to desktop: " . desktopName)
     WinGet, activeHwnd, ID, A
     DllCall(MoveWindowToDesktopNumberProc, UInt, activeHwnd, UInt, desktopNumber - 1)
 }

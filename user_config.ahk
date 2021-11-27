@@ -3,16 +3,30 @@
 ;
 
 ; ----------------------------------------------------------
+; Setup workspace indexes and names
+; ----------------------------------------------------------
+desktops := { "Web": 1
+            , "Art": 2
+            , "Coffee": 3
+            , "Files": 4
+            , "Terminal": 5
+            , "Social": 6
+            , "Games": 7
+            , "Music": 8 }
+
+DesktopCount := getInitialNumberOfDesktops(desktops)
+
+; ----------------------------------------------------------
 ; Keybindings to switch workspaces
 ; ----------------------------------------------------------
-LAlt & |::switchDesktopByNumber(1)  ; Web
-LAlt & 1::switchDesktopByNumber(2)  ; Art
-LAlt & 2::switchDesktopByNumber(3)  ; Coffee
-LAlt & 3::switchDesktopByNumber(4)  ; Files
-LAlt & 4::switchDesktopByNumber(5)  ; Terminal
-LAlt & 8::switchDesktopByNumber(6)  ; Social
-LAlt & 9::switchDesktopByNumber(7)  ; Games
-LAlt & 0::switchDesktopByNumber(8)  ; Music
+LAlt & |::switchDesktopByNumber(1)
+LAlt & 1::switchDesktopByNumber(2)
+LAlt & 2::switchDesktopByNumber(3)
+LAlt & 3::switchDesktopByNumber(4)
+LAlt & 4::switchDesktopByNumber(5)
+LAlt & 8::switchDesktopByNumber(6)
+LAlt & 9::switchDesktopByNumber(7)
+LAlt & 0::switchDesktopByNumber(8)
 
 ; ----------------------------------------------------------
 ; Keybindings to move the active window to another workspace
