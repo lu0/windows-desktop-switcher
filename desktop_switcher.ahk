@@ -239,6 +239,8 @@ updateGlobalVariables()
 switchDesktopByNumber(targetDesktop)
 {
     global CurrentDesktop, DesktopCount
+    desktopName := getDesktopNameByNumber(targetDesktop)
+    showMessage("Desktop switcher", desktopName)
     updateGlobalVariables()
     _switchDesktopToTarget(targetDesktop)
 }
