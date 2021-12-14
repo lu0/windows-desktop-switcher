@@ -29,7 +29,8 @@ SetKeyDelay, 75
 mapDesktopsFromRegistry()
 OutputDebug, [loading] desktops: %DesktopCount% current: %CurrentDesktop%
 
-#Include %A_ScriptDir%\user_config.ahk
+#Include %A_ScriptDir%\config\user_config.ahk
+#Include %A_ScriptDir%\config\window_tiling.ahk
 #Include %A_ScriptDir%\utils.ahk
 return
 
@@ -127,17 +128,29 @@ togglePinWindowOnTop()
 	Winset, Alwaysontop, , A
 }
 
+pinWindowOnAllDesktops() {
+    windowID := getCurrentWindowID()
+    windowTitle := getCurrentWindowTitle()
+    DllCall(PinWindowProc, UInt, windowID)
+    showMessage(windowTitle, "Pinned window on all desktops")
+}
+
+unpinWindowFromAllDesktops() {
+    windowID := getCurrentWindowID()
+    windowTitle := getCurrentWindowTitle()
+    DllCall(UnPinWindowProc, UInt, windowID)
+    showMessage(windowTitle, "Unpinned window from all desktops")
+}
+
 togglePinWindowOnAllDesktops()
 {
     windowID := getCurrentWindowID()
     windowTitle := getCurrentWindowTitle()
     if (DllCall(IsPinnedWindowProc, UInt, windowID)) {
-        DllCall(UnPinWindowProc, UInt, windowID)
-        showMessage(windowTitle, "Unpinned window on all desktops")
+        unpinWindowFromAllDesktops()
     }
     else {
-        DllCall(PinWindowProc, UInt, windowID)
-        showMessage(windowTitle, "Pinned window on all desktops")
+        pinWindowOnAllDesktops()
     }
 }
 
