@@ -3,6 +3,7 @@
 #KeyHistory 0 ; Ensures user privacy when debugging is not needed
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability
+CoordMode, Mouse, Screen
 
 ; Globals
 desktops := { "One" : 1, "Two" : 2 } ; Windows starts with 2 desktops at boot
@@ -180,6 +181,9 @@ _switchDesktopToTarget(targetDesktop)
     ; Globals variables should have been updated via updateGlobalVariables() prior to entering this function
     global CurrentDesktop, DesktopCount, LastOpenedDesktop
 
+    ; Store current mouse coordinates
+    MouseGetPos, prevMouseX, prevMouseY
+    
     ; Don't attempt to switch to an invalid desktop
     if (targetDesktop > DesktopCount || targetDesktop < 1 || targetDesktop == CurrentDesktop) {
         OutputDebug, [invalid] target: %targetDesktop% current: %CurrentDesktop%
@@ -205,9 +209,8 @@ _switchDesktopToTarget(targetDesktop)
         OutputDebug, [left] target: %targetDesktop% current: %CurrentDesktop%
     }
 
-    ; Makes the WinActivate fix less intrusive
-    Sleep, 50
-    focusTheForemostWindow(targetDesktop)
+    ; Restore mouse coordinates
+    MouseMove, %prevMouseX%, %prevMouseY%, 0
 }
 
 updateGlobalVariables()
