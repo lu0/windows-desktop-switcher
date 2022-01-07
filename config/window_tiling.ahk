@@ -11,13 +11,17 @@ CoordMode, Mouse, Screen
 ; Close
 ; ctrl + super + space
 ^#Space::
+    MouseGetPos, prevMouseX, prevMouseY
     WinClose, A
+    MouseMove, %prevMouseX%, %prevMouseY%, 0
     return
 
 ; Minimize
 ; left alt + x
 !x::
+    MouseGetPos, prevMouseX, prevMouseY
     WinMinimize, A
+    MouseMove, %prevMouseX%, %prevMouseY%, 0
     return
 
 ; Maximize with gaps
