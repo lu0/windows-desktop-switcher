@@ -8,13 +8,13 @@ CoordMode, Mouse, Screen
 
 ; Globals
 desktops := { "One" : 1, "Two" : 2 } ; Windows starts with 2 desktops at boot
-DesktopCount := getInitialNumberOfDesktops(desktops)
 
 CurrentDesktop := 1      ; Desktop count is 1-indexed (Microsoft numbers them this way)
 LastOpenedDesktop := 1
 
 ; DLL
-hVirtualDesktopAccessor := DllCall("LoadLibrary", "Str", A_ScriptDir . "\VirtualDesktopAccessor\x64\Release\VirtualDesktopAccessor.dll", "Ptr")
+hVirtualDesktopAccessor := DllCall("LoadLibrary", "Str", A_ScriptDir . "\VirtualDesktopAccessor.dll", "Ptr")
+
 global IsWindowOnDesktopNumberProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, AStr, "IsWindowOnDesktopNumber", "Ptr")
 global MoveWindowToDesktopNumberProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, AStr, "MoveWindowToDesktopNumber", "Ptr")
 
@@ -24,6 +24,9 @@ global UnPinWindowProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor
 global IsPinnedAppProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, AStr, "IsPinnedApp", "Ptr")
 global PinAppProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, AStr, "PinApp", "Ptr")
 global UnPinAppProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, AStr, "UnPinApp", "Ptr")
+global GetDesktopCountProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, AStr, "GetDesktopCount", "Ptr")
+
+DesktopCount := getNumberOfDesktops()
 
 ; Main
 SetKeyDelay, 75
@@ -88,12 +91,8 @@ mapDesktopsFromRegistry()
     }
 }
 
-getInitialNumberOfDesktops(desktopDict) {
-    ; Get the number of destops (index starts on 0)
-    desktopCount := -1
-    for desk in desktopDict {
-        desktopCount++
-    }
+getNumberOfDesktops() {
+    desktopCount := DllCall(GetDesktopCountProc, "Int")
     return desktopCount
 }
 

@@ -14,7 +14,7 @@ desktops := { "Web": 1
             , "Games": 7
             , "Music": 8 }
 
-DesktopCount := getInitialNumberOfDesktops(desktops)
+DesktopCount := getNumberOfDesktops()
 
 ; ----------------------------------------------------------
 ; Keybindings to switch workspaces
