@@ -25,6 +25,8 @@ global IsPinnedAppProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor
 global PinAppProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, AStr, "PinApp", "Ptr")
 global UnPinAppProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, AStr, "UnPinApp", "Ptr")
 global GetDesktopCountProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, AStr, "GetDesktopCount", "Ptr")
+global GoToDesktopNumberProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, "AStr", "GoToDesktopNumber", "Ptr")
+
 
 DesktopCount := getNumberOfDesktops()
 
@@ -209,18 +211,9 @@ _switchDesktopToTarget(targetDesktop)
     WinActivate, ahk_class Shell_TrayWnd
 
     ; Go right until we reach the desktop we want
-    while(CurrentDesktop < targetDesktop) {
-        Send {LWin down}{LCtrl down}{Right down}{LWin up}{LCtrl up}{Right up}
-        CurrentDesktop++
-        OutputDebug, [right] target: %targetDesktop% current: %CurrentDesktop%
-    }
+    DllCall(GoToDesktopNumberProc, "Int", targetDesktop - 1, "Int")
 
-    ; Go left until we reach the desktop we want
-    while(CurrentDesktop > targetDesktop) {
-        Send {LWin down}{LCtrl down}{Left down}{Lwin up}{LCtrl up}{Left up}
-        CurrentDesktop--
-        OutputDebug, [left] target: %targetDesktop% current: %CurrentDesktop%
-    }
+    CurrentDesktop := targetDesktop
 
     ; Restore mouse coordinates
     MouseMove, %prevMouseX%, %prevMouseY%, 0
@@ -237,7 +230,6 @@ switchDesktopByNumber(targetDesktop)
 {
     global CurrentDesktop, DesktopCount
     desktopName := getDesktopNameByNumber(targetDesktop)
-    showMessage("Desktop switcher", desktopName)
     updateGlobalVariables()
     _switchDesktopToTarget(targetDesktop)
 }
